@@ -96,11 +96,16 @@ public:
 		this->descriere = NULL;
 	}
 
-	Instrument(const Instrument &i) :id(++nrInstrumente) {
-		this->descriere = new char[strlen(i.descriere) + 1];
-		strcpy(this->descriere, i.descriere);
-		this->tip = tip;
-		this->greutate = greutate;
+	Instrument(const Instrument& i) :id(i.id) {
+		if (i.descriere != nullptr) {
+			this->descriere = new char[strlen(i.descriere) + 1];
+			strcpy(this->descriere, i.descriere);
+		}
+		else {
+			this->descriere = nullptr;
+		}
+		this->tip = i.tip;
+		this->greutate = i.greutate;
 	}
 
 	Instrument(string tip, float greutate, char* descriere) :id(++nrInstrumente) {
@@ -200,11 +205,15 @@ void main() {
 	strcpy(i3.descriere, "test");
 	i3.greutate = 64;
 	i3.tip = "corzi";
+	i3.afisareInstrument();
 
 	Instrument i4 = i3;
+	i4.descriere = new char[strlen("test nou") + 1];
 	strcpy(i4.descriere, "test nou");
 
-	cout <<i3.descriere;
+	cout << i3.descriere << endl;
+	i3.afisareInstrument();
+	i4.afisareInstrument();
 
 	Aparat a1;
 	a1.afisareAparat();
