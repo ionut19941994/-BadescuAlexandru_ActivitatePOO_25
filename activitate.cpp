@@ -6,7 +6,7 @@
 using namespace std;
 
 class Biblioteca {
-private:
+public:
 	const int id;
 	static int nrBiblioteci;
 	int nrRafturi;
@@ -53,6 +53,10 @@ public:
 		}
 	}
 
+	static int getNrBiblioteci() {
+		return nrBiblioteci;
+	}
+
 	void afisareBiblioteca() {
 		cout << this->id << ". Biblioteca " << this->culoare << " de inaltime " << this->inaltime;
 		if (this->nrRafturi > 0) {
@@ -96,6 +100,12 @@ public:
 		this->descriere = NULL;
 	}
 
+	Instrument(string tip) : id(++nrInstrumente) {
+		this->tip = tip;
+		this->greutate = 0;
+		this->descriere = nullptr;
+	}
+
 	Instrument(const Instrument& i) :id(i.id) {
 		if (i.descriere != nullptr) {
 			this->descriere = new char[strlen(i.descriere) + 1];
@@ -124,6 +134,10 @@ public:
 		}
 	}
 
+	static int getNrInstrumente() {
+		return nrInstrumente;
+	}
+
 	void afisareInstrument() {
 		cout << this->id << ". Instrumentul de tip " << this->tip << " de " << this->greutate << "kg este ";
 		if (this->descriere != nullptr) {
@@ -137,7 +151,7 @@ public:
 };
 
 class Aparat {
-private:
+public:
 	const int id;
 	static int nrAparate;
 	string nume;
@@ -159,6 +173,20 @@ public:
 		}
 	}
 
+	Aparat(int nrComponente, float cantitateUnica) : id(++nrAparate) {
+		this->nume = "generic";
+		this->nrComponente = nrComponente;
+		if (nrComponente > 0) {
+			this->cantitati = new float[nrComponente];
+			for (int i = 0; i < nrComponente; i++) {
+				this->cantitati[i] = cantitateUnica;
+			}
+		}
+		else {
+			this->cantitati = nullptr;
+		}
+	}
+
 	~Aparat() {
 		if (this->cantitati != nullptr) {
 			delete[] this->cantitati;
@@ -175,6 +203,10 @@ public:
 			}
 		}
 		cout << endl;
+	}
+
+	static int getNrAparate() {
+		return nrAparate;
 	}
 };
 
@@ -211,6 +243,9 @@ void main() {
 	i4.descriere = new char[strlen("test nou") + 1];
 	strcpy(i4.descriere, "test nou");
 
+	Instrument i5("lemn");
+	i5.afisareInstrument();
+
 	cout << i3.descriere << endl;
 	i3.afisareInstrument();
 	i4.afisareInstrument();
@@ -218,7 +253,14 @@ void main() {
 	Aparat a1;
 	a1.afisareAparat();
 
+	Aparat a3(3, 7.5f);
+	a3.afisareAparat();
+
 	float cantitati1[] = { 20, 10 };
 	Aparat a2("foto", 2, cantitati1);
 	a2.afisareAparat();
+
+	cout << "Biblioteci create: " << Biblioteca::getNrBiblioteci() << endl;
+	cout << "Instrumente create: " << Instrument::getNrInstrumente() << endl;
+	cout << "Aparate create: " << Aparat::getNrAparate() << endl;
 }
